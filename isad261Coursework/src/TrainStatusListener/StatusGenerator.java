@@ -11,13 +11,15 @@ package TrainStatusListener;
  */
 public class StatusGenerator {
     private IncomingTrainsStatusListener trainListener;
+    public static Response status;
     
     public StatusGenerator(IncomingTrainsStatusListener trainListener){
         this.trainListener = trainListener;
     }
     
-    public void getAll(){
-        trainListener.getJSON("http://web.socem.plymouth.ac.uk/david/trains.json");
+    public void getStatusData() throws Exception{
+        status = trainListener.getJSON("http://web.socem.plymouth.ac.uk/david/trains.json");
+        System.out.println(status.getData());
     }
     
     
