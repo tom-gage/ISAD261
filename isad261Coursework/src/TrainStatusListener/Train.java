@@ -5,10 +5,15 @@
  */
 package TrainStatusListener;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Tom
  */
 public class Train {
-    
+    private String platform;
+    private String departureTime;
+    private String expectedDepartureTime;
+    private ArrayList stops;
 }
