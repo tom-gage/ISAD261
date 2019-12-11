@@ -6,12 +6,10 @@
 package TrainStatusListener;
 
 import com.google.gson.Gson; 
-import java.util.List;
-import java.io.InputStreamReader;
+import com.google.gson.stream.*;
+import java.util.*;
+import java.io.*;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 /**
  *
  * @author btgage
@@ -33,58 +31,92 @@ public class StatusGenerator {
    public List<Train> readJsonStream(InputStream in) throws IOException {
      JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
      try {
-       return readMessagesArray(reader);
+       return readIncomingTrainsArray(reader);
      } finally {
        reader.close();
      }
    }
 
-   public List<Message> readMessagesArray(JsonReader reader) throws IOException {
-     List<Message> messages = new ArrayList<Message>();
+   public List<Train> readIncomingTrainsArray(JsonReader reader) throws IOException {
+     List<Train> trains = new ArrayList<Train>();
 
      reader.beginArray();
      while (reader.hasNext()) {
-       messages.add(readMessage(reader));
+       trains.add(constructTrainObject(reader));
      }
      reader.endArray();
-     return messages;
+     return trains;
    }
 
-   public Message readMessage(JsonReader reader) throws IOException {
-     long id = -1;
-     String text = null;
-     User user = null;
-     List<Double> geo = null;
+   public Train constructTrainObject(JsonReader reader) throws IOException {
+     List stops;
+     String platform;
+     String departureTime;
+     String expectedDepartureTime;
+     
 
      reader.beginObject();
      while (reader.hasNext()) {
-       String name = reader.nextName();
-       if (name.equals("id")) {
-         id = reader.nextLong();
-       } else if (name.equals("text")) {
-         text = reader.nextString();
-       } else if (name.equals("geo") && reader.peek() != JsonToken.NULL) {
-         geo = readDoublesArray(reader);
-       } else if (name.equals("user")) {
-         user = readUser(reader);
-       } else {
-         reader.skipValue();
-       }
+        String name = reader.nextName();
+        if (name.equals("stops")) {
+          stops = readStopsArray(reader);
+        } else if (name.equals("platform")) {
+          platform = reader.nextString();
+        } else if (name.equals("departs")){
+          departureTime = reader.nextString();
+        } else if (name.equals("expected")) {
+          expectedDepartureTime = reader.nextString();
+        } else {
+          reader.skipValue();
+        }
      }
      reader.endObject();
-     return new Message(id, text, user, geo);
+     return new Train(stops, platform, departureTime, expectedDepartureTime);
    }
 
    public List<Double> readDoublesArray(JsonReader reader) throws IOException {
-     List<Double> doubles = new ArrayList<Double>();
+        List<Double> doubles = new ArrayList<Double>();
 
-     reader.beginArray();
-     while (reader.hasNext()) {
-       doubles.add(reader.nextDouble());
-     }
-     reader.endArray();
-     return doubles;
+        reader.beginArray();
+        while (reader.hasNext()) {
+          doubles.add(reader.nextDouble());
+        }
+        reader.endArray();
+        return doubles;
    }
+   
+    public List<Stop> readStopsArray(JsonReader reader) throws IOException{
+        List<Stop> stops = new ArrayList<Stop>();
+        
+        reader.beginArray();
+        while(reader.hasNext()){
+            stops.add(constructStopObject(reader));
+        }
+        reader.endArray();
+        return stops;
+    }
+    
+    public Stop constructStopObject(JsonReader reader) throws IOException{
+        String name = null;
+        String arrivalTime = null;
+        String departureTime = null;
+        
+        reader.beginObject();
+        while(reader.hasNext()){
+            String nextName = reader.nextName();
+            if(nextName == "name"){
+                name = reader.nextString();
+            }else if(nextName == "arrives"){
+                arrivalTime = reader.nextString();
+            }else if(nextName == "departs"){
+                departureTime = reader.nextString();
+            }else{
+                reader.skipValue();
+            }
+        }
+        reader.endObject();
+        return new Stop(name, arrivalTime, departureTime);
+    }
 
    public User readUser(JsonReader reader) throws IOException {
      String username = null;
