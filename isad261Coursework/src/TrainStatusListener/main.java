@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package TrainStatusListener;
-
+import java.util.*;
 /**
  *
  * @author Tom
@@ -15,11 +15,15 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        IncomingTrainsStatusListener myListener = new IncomingTrainsStatusListener();
+        StatusListener myListener = new StatusListener();
         StatusGenerator myGenerator = new StatusGenerator(myListener);
         
         System.out.println("PROGRAM START");
-        myGenerator.getStatusData();
+        List<Train> trains = myListener.getTrainData("http://web.socem.plymouth.ac.uk/david/trains.json");
+        
+        Train testTrain = trains.get(0);
+        
+        System.out.println(testTrain.getDepartureTime());
     }
     
 }
