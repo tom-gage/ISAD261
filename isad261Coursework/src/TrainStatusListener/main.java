@@ -22,8 +22,8 @@ public class main {
         List<Train> trains = myListener.getTrainData("http://web.socem.plymouth.ac.uk/david/trains.json");
         
         Train testTrain = trains.get(0);
-        
-        System.out.println(testTrain.getDepartureTime());
+        List<Train> trainsByPlatform = myGenerator.getTrainsByPlatform(1);
+        System.out.println(trainsByPlatform);
     }
     
 }

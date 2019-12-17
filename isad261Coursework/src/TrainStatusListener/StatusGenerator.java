@@ -36,23 +36,66 @@ public class StatusGenerator {
         }
     }
 
-    public List<Train> getAllTrainsByPlatform(int platform) {
+    public List<Train> getTrainsByPlatform(int platform) {
         try {
+            List<Train> trainsListByPlatform = new ArrayList();
             trainsList = getStatusData(api);
             for (int i = 0; i < trainsList.size(); i++) {
-            
+                Train tempTrain = trainsList.get(i);
+                
+                if(tempTrain.getPlatform().equals(Integer.toString(platform))){
+                    trainsListByPlatform.add(tempTrain);
+                }
             }
+            
+            return trainsListByPlatform;
+            
         } catch (Exception e) {
             return null;
         }
     }
 
-    public void getAllTrainsByStation(String station) {
-
+    public List<Train> getTrainsByStation(String station) {
+        try {
+            List<Train> trainsListByStation = new ArrayList();
+            trainsList = getStatusData(api);
+            
+            for (int i = 0; i < trainsList.size(); i++) {
+                Train tempTrain = trainsList.get(i);
+                List<Stop> tempStops = tempTrain.getStops();
+                
+                for (int x = 0; x < tempStops.size(); x++){
+                    Stop tempStop = tempStops.get(x);
+                    
+                    if(tempStop.getName().equals(station)){
+                        trainsListByStation.add(tempTrain);
+                    }
+                }
+            }
+            
+            return trainsListByStation;
+            
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    public void getAllOverdueTrains() {
-
+    public List<Train> getAllOverdueTrains() {
+        try {
+            List<Train> overdueTrainsList = new ArrayList();
+            trainsList = getStatusData(api);
+            for (int i = 0; i < trainsList.size(); i++) {
+                Train tempTrain = trainsList.get(i);
+                if(tempTrain.getExpectedDepartureTime() == null){
+                    overdueTrainsList.add(tempTrain);
+                }
+            }
+            
+            return overdueTrainsList;
+            
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public void overdudeTrainsNotice() {
