@@ -5,6 +5,7 @@
  */
 package TrainStatusListener;
 import java.util.*;
+
 /**
  *
  * @author Tom
@@ -13,17 +14,28 @@ public class main {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
         StatusListener myListener = new StatusListener();
         StatusGenerator myGenerator = new StatusGenerator(myListener);
         
         System.out.println("PROGRAM START");
-        List<Train> trains = myListener.getTrainData("http://web.socem.plymouth.ac.uk/david/trains.json");
+        List<Train> trains = myGenerator.getTrainsList("http://web.socem.plymouth.ac.uk/david/trains.json");
+        List<Train> overdueTrains = myGenerator.getAllOverdueTrains(trains);
         
-        Train testTrain = trains.get(0);
-        List<Train> trainsByPlatform = myGenerator.getTrainsByPlatform(1);
-        System.out.println(trainsByPlatform);
+        Train train = trains.get(0);
+        Train overdueTrain = overdueTrains.get(0);
+        
+        List<Stop> trainStops = train.getStops();
+        List<Stop> overdueTrainStops = overdueTrain.getStops();
+        
+        Stop stop = trainStops.get(0);
+//        System.out.println(stop.getDepartureTime()); 
+        
+        myGenerator.printOverdudeTrainsNotice(overdueTrains);
+        
+        
     }
     
 }

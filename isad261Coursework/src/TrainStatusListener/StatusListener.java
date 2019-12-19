@@ -5,11 +5,8 @@
  */
 package TrainStatusListener;
 
-import com.google.gson.stream.JsonReader;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import com.google.gson.stream.*;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -21,13 +18,17 @@ import java.util.*;
 public class StatusListener {
 
     public List<Train> getTrainData(String url) throws Exception {
-        URL apiURL = new URL(url);
-        HttpURLConnection myConnection = (HttpURLConnection) apiURL.openConnection();
-        myConnection.setRequestMethod("GET");
+        try {
+            URL apiURL = new URL(url);
+            HttpURLConnection myConnection = (HttpURLConnection) apiURL.openConnection();
+            myConnection.setRequestMethod("GET");
 
-        List<Train> trains = new ArrayList<Train>();
-        trains = readJsonStream(myConnection.getInputStream());
-        return trains;
+            List<Train> trains = new ArrayList<Train>();
+            trains = readJsonStream(myConnection.getInputStream());
+            return trains;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<Train> readJsonStream(InputStream in) throws IOException {
@@ -51,10 +52,11 @@ public class StatusListener {
     }
 
     public Train constructTrainObject(JsonReader reader) throws IOException {
-        List stops = null;
+        List<Stop> stops = null;
         String platform = null;
         String departureTime = null;
         String expectedDepartureTime = null;
+        String destinationName = null;
 
         reader.beginObject();
         while (reader.hasNext()) {
@@ -72,7 +74,11 @@ public class StatusListener {
             }
         }
         reader.endObject();
-        return new Train(platform, departureTime, expectedDepartureTime, stops);
+
+        Stop finalStop = stops.get(stops.size() - 1);
+        destinationName = finalStop.getName();
+
+        return new Train(platform, departureTime, expectedDepartureTime, destinationName, stops);
     }
 
     public List<Stop> readStopsArray(JsonReader reader) throws IOException {
@@ -87,24 +93,24 @@ public class StatusListener {
     }
 
     public Stop constructStopObject(JsonReader reader) throws IOException {
-        String name = null;
+        String stopName = null;
         String arrivalTime = null;
         String departureTime = null;
 
         reader.beginObject();
         while (reader.hasNext()) {
-            String nextName = reader.nextName();
-            if (nextName == "name") {
-                name = reader.nextString();
-            } else if (nextName == "arrives") {
+            String name = reader.nextName();
+            if (name.equals("name")) {
+                stopName = reader.nextString();
+            } else if (name.equals("arrives")) {
                 arrivalTime = reader.nextString();
-            } else if (nextName == "departs") {
+            } else if (name.equals("departs") && reader.peek() != JsonToken.NULL) {
                 departureTime = reader.nextString();
             } else {
                 reader.skipValue();
             }
         }
         reader.endObject();
-        return new Stop(name, arrivalTime, departureTime);
+        return new Stop(stopName, arrivalTime, departureTime);
     }
 }

@@ -24,81 +24,106 @@ public class StatusGenerator {
         this.listener = listener;
     }
 
-    public List<Train> getStatusData(String apiURL) throws Exception {
-        return listener.getTrainData(apiURL);
+    public StatusGenerator() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Train> getAllIncomingTrains() {
+    public List<Train> getTrainsList(String apiURL) {
         try {
-            return trainsList = getStatusData(api);
+            return trainsList = listener.getTrainData(apiURL);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Train> getTrainsByPlatform(int platform) {
+    public List<Train> getTrainsByPlatform(int platform, List<Train> trainsList) {
         try {
             List<Train> trainsListByPlatform = new ArrayList();
-            trainsList = getStatusData(api);
+            
             for (int i = 0; i < trainsList.size(); i++) {
                 Train tempTrain = trainsList.get(i);
-                
-                if(tempTrain.getPlatform().equals(Integer.toString(platform))){
+
+                if (tempTrain.getPlatform().equals(Integer.toString(platform))) {
                     trainsListByPlatform.add(tempTrain);
                 }
             }
-            
-            return trainsListByPlatform;
+            if(trainsListByPlatform.isEmpty()){
+                return null;
+            }else{
+                return trainsListByPlatform;
+            }
             
         } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Train> getTrainsByStation(String station) {
+    public List<Train> getTrainsByStation(String station, List<Train> trainsList) {
         try {
             List<Train> trainsListByStation = new ArrayList();
-            trainsList = getStatusData(api);
-            
+
             for (int i = 0; i < trainsList.size(); i++) {
                 Train tempTrain = trainsList.get(i);
                 List<Stop> tempStops = tempTrain.getStops();
-                
-                for (int x = 0; x < tempStops.size(); x++){
+
+                for (int x = 0; x < tempStops.size(); x++) {
                     Stop tempStop = tempStops.get(x);
-                    
-                    if(tempStop.getName().equals(station)){
+
+                    if (tempStop.getName().equals(station)) {
                         trainsListByStation.add(tempTrain);
+                        x = tempStops.size();
                     }
                 }
             }
-            
-            return trainsListByStation;
+            if(trainsListByStation.isEmpty()){
+                return null;
+            }else{
+                return trainsListByStation;
+            }
             
         } catch (Exception e) {
             return null;
         }
     }
 
-    public List<Train> getAllOverdueTrains() {
+    public List<Train> getAllOverdueTrains(List<Train> trainsList) {
         try {
             List<Train> overdueTrainsList = new ArrayList();
-            trainsList = getStatusData(api);
             for (int i = 0; i < trainsList.size(); i++) {
                 Train tempTrain = trainsList.get(i);
-                if(tempTrain.getExpectedDepartureTime() == null){
+                if (tempTrain.getExpectedDepartureTime() != null) {
                     overdueTrainsList.add(tempTrain);
                 }
             }
-            
-            return overdueTrainsList;
+            if(overdueTrainsList.isEmpty()){
+                return null;
+            }else{
+                return overdueTrainsList;
+            }
             
         } catch (Exception e) {
             return null;
         }
     }
 
-    public void overdudeTrainsNotice() {
+    public void printOverdudeTrainsNotice(List<Train> overdueTrainsList) {
+        try {
+            if (!overdueTrainsList.isEmpty()) {
+                System.out.println("The following trains are delayed: ");
+                for (int i = 0; i < overdueTrainsList.size(); i++) {
+                    Train tempTrain = overdueTrainsList.get(i);
+                    
+                    System.out.println(
+                            "The " + tempTrain.getDepartureTime()+ " train to "
+                            + tempTrain.getDestinationName() + " is delayed and will depart at "
+                            + tempTrain.getExpectedDepartureTime() + "."
+                    );
+                }
+            }
 
+        } catch (Exception e) {
+
+        }
     }
+
 }

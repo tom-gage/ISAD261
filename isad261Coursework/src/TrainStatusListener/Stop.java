@@ -10,12 +10,17 @@ package TrainStatusListener;
  * @author Tom
  */
 public class Stop {
+
     private String name, arrivalTime, departureTime;
-    
-    public Stop(String name, String arrivalTime, String departureTime){
+
+    public Stop(String name, String arrivalTime, String departureTime) {
         this.name = name;
         this.arrivalTime = arrivalTime;
-        this. departureTime = departureTime;
+        this.departureTime = departureTime;
+    }
+
+    public Stop() {
+        
     }
 
     public String getName() {
@@ -42,6 +47,4 @@ public class Stop {
         this.departureTime = departureTime;
     }
 
-    
-    
 }

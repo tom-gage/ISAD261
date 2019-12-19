@@ -12,17 +12,29 @@ import java.util.*;
  * @author Tom
  */
 public class Train {
+
     private String platform, departureTime, expectedDepartureTime;
-    private List stops;
-    
-    public Train(String platform, String departureTime, String expectedDepartureTime, List stops){
+    private String destinationName = null;
+    private List<Stop> stops;
+
+    public Train(String platform, String departureTime, String expectedDepartureTime, String destinationName, List stops) {
+        this.platform = platform;
+        this.departureTime = departureTime;
+        this.expectedDepartureTime = expectedDepartureTime;
+        this.destinationName = destinationName;
+        this.stops = stops;
+
+    }
+
+    public Train(String platform, String departureTime, String expectedDepartureTime, List stops) {
         this.platform = platform;
         this.departureTime = departureTime;
         this.expectedDepartureTime = expectedDepartureTime;
         this.stops = stops;
+
     }
-    
-    public Train(){
+
+    public Train() {
     }
 
     public String getPlatform() {
@@ -56,6 +68,13 @@ public class Train {
     public void setStops(List stops) {
         this.stops = stops;
     }
-    
-    
+
+    public String getDestinationName() {
+        return destinationName;
+    }
+
+    public void setDestinationName(String destinationName) {
+        this.destinationName = destinationName;
+    }
+
 }
