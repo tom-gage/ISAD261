@@ -23,25 +23,24 @@ import TrainStatusListener.*;
  * @author Tom
  */
 public class getTrainsByPlatformTest {
+
     private TrainStatusGenerator.GetTrainsByPlatform mockGetTrainsByPlatform;
 
+    private java.util.List mockTrainsList;
     private java.util.List actualTrainsList;
 
-    private TrainStatusGenerator.Stop mockStopA;
-    private java.util.List mockStopsA;
+    private java.util.List expectedTrainsList;
+
+    private TrainStatusGenerator.Stop mockStop;
+    private java.util.List mockStops;
 
     private TrainStatusGenerator.Train mockTrainA;
-    private java.util.List mockTrainsListA;
-
-    private java.util.List mockTrainsListAExpected;
-
-    private TrainStatusGenerator.Stop mockStopB;
-    private java.util.List mockStopsB;
 
     private TrainStatusGenerator.Train mockTrainB;
-    private java.util.List mockTrainsListB;
 
-    private java.util.List mockTrainsListBExpected;
+    private TrainStatusGenerator.Train mockTrainC;
+
+    private TrainStatusGenerator.Train mockTrainD;
 
     public getTrainsByPlatformTest() {
     }
@@ -58,82 +57,95 @@ public class getTrainsByPlatformTest {
     public void setUp() {
         mockGetTrainsByPlatform = new GetTrainsByPlatform();
 
+        mockTrainsList = new ArrayList<Train>();
         actualTrainsList = new ArrayList<Train>();
+        expectedTrainsList = new ArrayList<Train>();
 
-        mockStopA = new Stop("stopNameA", "0000", "1111");
-        mockStopsA = new ArrayList<Stop>();
-        mockStopsA.add(mockStopA);
-        mockStopsA.add(mockStopA);
-        mockStopsA.add(mockStopA);
+        //mock stops
+        mockStop = new Stop("stopNameA", "0000", "1111");
+        mockStops = new ArrayList<Stop>();
+        mockStops.add(mockStop);
+        mockStops.add(mockStop);
+        mockStops.add(mockStop);
 
-        mockTrainA = new Train("0", "0000", null, "finalStopNameA", mockStopsA);
-        mockTrainsListA = new ArrayList<Train>();
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
+        //mock trains
+        mockTrainA = new Train("0", "0000", "1111", mockStops);
+        mockTrainB = new Train("1", "0000", "1111", mockStops);
+        mockTrainC = new Train("99999", "0000", "1111", mockStops);
+        mockTrainD = new Train("-99999", "0000", "1111", mockStops);
 
-        mockTrainsListAExpected = new ArrayList<Train>();
-        mockTrainsListAExpected.add(mockTrainA);
-        mockTrainsListAExpected.add(mockTrainA);
-        mockTrainsListAExpected.add(mockTrainA);
+        for (int i = 0; i < 2; i++) {
+            mockTrainsList.add(mockTrainA);
+            mockTrainsList.add(mockTrainB);
+            mockTrainsList.add(mockTrainC);
+            mockTrainsList.add(mockTrainD);
+        }
 
-        mockStopB = new Stop("stopNameB", "0000", "1111");
-        mockStopsB = new ArrayList<Stop>();
-        mockStopsB.add(mockStopB);
-        mockStopsB.add(mockStopB);
-        mockStopsB.add(mockStopB);
-
-        mockTrainB = new Train("1", "0000", "1111", "finalStopNameB", mockStopsB);
-        mockTrainsListB = new ArrayList<Train>();
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
-
-        mockTrainsListBExpected = new ArrayList<Train>();
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
     }
 
     @After
     public void tearDown() {
         actualTrainsList = null;
 
-        mockStopA = null;
-        mockStopsA = null;
+        mockStop = null;
+        mockStops = null;
         mockTrainA = null;
-        mockTrainsListA = null;
-        mockTrainsListAExpected = null;
-
-        mockStopB = null;
-        mockStopsB = null;
         mockTrainB = null;
-        mockTrainsListB = null;
-        mockTrainsListBExpected = null;
     }
 
     @Test
-    public void testGetTrainsByPlatformValidPlatformA() {
-        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, mockTrainsListA);
+    public void testGetTrainsByPlatformZero() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, mockTrainsList);
 
-        assertEquals("Fails to return a list of trains", mockTrainsListAExpected, actualTrainsList);
+        expectedTrainsList.add(mockTrainA);
+        expectedTrainsList.add(mockTrainA);
+
+        assertEquals("Fails to return a list of trains", expectedTrainsList, actualTrainsList);
     }
 
     @Test
-    public void testGetTrainsByPlatformValidPlatformB() {
-        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(1, mockTrainsListB);
+    public void testGetTrainsByPlatformOne() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(1, mockTrainsList);
 
-        assertEquals("Fails to return a list of trains", mockTrainsListBExpected, actualTrainsList);
+        expectedTrainsList.add(mockTrainB);
+        expectedTrainsList.add(mockTrainB);
+
+        assertEquals("Fails to return a list of trains", expectedTrainsList, actualTrainsList);
     }
 
     @Test
-    public void testGetTrainsByPlatformInvalidPlatform() {
-        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(-1, mockTrainsListA);
+    public void testGetTrainsByPlatformExtreme() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(99999, mockTrainsList);
+
+        expectedTrainsList.add(mockTrainC);
+        expectedTrainsList.add(mockTrainC);
+
+        assertEquals("Fails to return a list of trains", expectedTrainsList, actualTrainsList);
+    }
+
+    @Test
+    public void testGetTrainsByPlatformMinus() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(-99999, mockTrainsList);
+
+        expectedTrainsList.add(mockTrainD);
+        expectedTrainsList.add(mockTrainD);
+
+        assertEquals("Fails to return a list of trains", expectedTrainsList, actualTrainsList);
+    }
+
+    @Test
+    public void testGetTrainsByPlatformNotFound() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(8, mockTrainsList);
 
         assertEquals("Fails to return a list of trains", null, actualTrainsList);
-        
     }
 
+    @Test
+    public void testGetTrainsByPlatformEmptyTrainsList() {
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, null);
+
+        assertEquals("Fails to return a list of trains", null, actualTrainsList);
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

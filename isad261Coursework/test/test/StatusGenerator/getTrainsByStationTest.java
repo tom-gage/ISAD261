@@ -23,25 +23,27 @@ import TrainStatusListener.*;
  * @author Tom
  */
 public class getTrainsByStationTest {
+
     private TrainStatusGenerator.GetTrainsByStation mockGetTrainsByStation;
 
+    private java.util.List mockTrainsList;
     private java.util.List actualTrainsList;
+    private java.util.List expectedTrainsList;
 
     private TrainStatusGenerator.Stop mockStopA;
+    private TrainStatusGenerator.Stop mockStopB;
+    private TrainStatusGenerator.Stop mockStopC;
+    private TrainStatusGenerator.Stop mockStopD;
+
     private java.util.List mockStopsA;
+    private java.util.List mockStopsB;
+    private java.util.List mockStopsC;
+    private java.util.List mockStopsD;
 
     private TrainStatusGenerator.Train mockTrainA;
-    private java.util.List mockTrainsListA;
-
-    private java.util.List mockTrainsListAExpected;
-
-    private TrainStatusGenerator.Stop mockStopB;
-    private java.util.List mockStopsB;
-
     private TrainStatusGenerator.Train mockTrainB;
-    private java.util.List mockTrainsListB;
-
-    private java.util.List mockTrainsListBExpected;
+    private TrainStatusGenerator.Train mockTrainC;
+    private TrainStatusGenerator.Train mockTrainD;
 
     public getTrainsByStationTest() {
     }
@@ -57,44 +59,49 @@ public class getTrainsByStationTest {
     @Before
     public void setUp() {
         mockGetTrainsByStation = new GetTrainsByStation();
-        
+
+        expectedTrainsList = new ArrayList<Train>();
         actualTrainsList = new ArrayList<Train>();
 
-        mockStopA = new Stop("stopNameA", "0000", "1111");
+        mockStopA = new Stop("London", "0000", "1111");
+        mockStopB = new Stop("Plymouth", "0000", "1111");
+        mockStopC = new Stop("Exeter", "0000", "1111");
+
+        //train a, has london, plymouth and exeter
         mockStopsA = new ArrayList<Stop>();
         mockStopsA.add(mockStopA);
-        mockStopsA.add(mockStopA);
-        mockStopsA.add(mockStopA);
+        mockStopsA.add(mockStopB);
+        mockStopsA.add(mockStopC);
 
         mockTrainA = new Train("0", "0000", null, "finalStopNameA", mockStopsA);
-        mockTrainsListA = new ArrayList<Train>();
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
 
-        mockTrainsListAExpected = new ArrayList<Train>();
-        mockTrainsListAExpected.add(mockTrainA);
-        mockTrainsListAExpected.add(mockTrainA);
-        mockTrainsListAExpected.add(mockTrainA);
-        
-        
-
-        mockStopB = new Stop("stopNameB", "0000", "1111");
+        //train b, has plymouth
         mockStopsB = new ArrayList<Stop>();
         mockStopsB.add(mockStopB);
-        mockStopsB.add(mockStopB);
-        mockStopsB.add(mockStopB);
 
-        mockTrainB = new Train("0", "0000", "1111", "finalStopNameB", mockStopsB);
-        mockTrainsListB = new ArrayList<Train>();
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
+        mockTrainB = new Train("0", "0000", null, "finalStopNameA", mockStopsB);
 
-        mockTrainsListBExpected = new ArrayList<Train>();
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
+        //train c, has lots of the same
+        mockStopsC = new ArrayList<Stop>();
+
+        mockTrainC = new Train("0", "0000", null, "finalStopNameA", mockStopsC);
+        mockStopsC.add(mockStopC);
+        mockStopsC.add(mockStopC);
+        mockStopsC.add(mockStopC);
+        mockStopsC.add(mockStopC);
+        mockStopsC.add(mockStopC);
+
+        //train d, has nothing
+        mockStopsD = new ArrayList<Stop>();
+
+        mockTrainD = new Train("0", "0000", null, "finalStopNameA", mockStopsD);
+
+        mockTrainsList = new ArrayList<Train>();
+        mockTrainsList.add(mockTrainA);
+        mockTrainsList.add(mockTrainB);
+        mockTrainsList.add(mockTrainC);
+        mockTrainsList.add(mockTrainD);
+
     }
 
     @After
@@ -104,37 +111,49 @@ public class getTrainsByStationTest {
         mockStopA = null;
         mockStopsA = null;
         mockTrainA = null;
-        mockTrainsListA = null;
-        mockTrainsListAExpected = null;
 
         mockStopB = null;
         mockStopsB = null;
         mockTrainB = null;
-        mockTrainsListB = null;
-        mockTrainsListBExpected = null;
     }
 
     @Test
-    public void testGetTrainsByStation_ValidStationA() {
-        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("stopNameA", mockTrainsListA);
+    public void testGetTrainsByStationLondon() {
+        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("London", mockTrainsList);
 
-        assertEquals("Fails to return trains by station name", actualTrainsList, mockTrainsListAExpected);
+        expectedTrainsList.add(mockTrainA);
+
+        assertEquals("Fails to return trains by station name", expectedTrainsList, actualTrainsList);
     }
 
     @Test
-    public void testGetTrainsByStation_ValidStationB() {
-        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("stopNameB", mockTrainsListB);
+    public void testGetTrainsByStationPlymouth() {
+        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("Plymouth", mockTrainsList);
 
-        assertEquals("Fails to return trains by station name", actualTrainsList, mockTrainsListBExpected);
+        expectedTrainsList.add(mockTrainA);
+        expectedTrainsList.add(mockTrainB);
+
+        assertEquals("Fails to return trains by station name", expectedTrainsList, actualTrainsList);
     }
 
     @Test
-    public void testGetTrainsByStation_InvalidStation() {
-        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("---", mockTrainsListA);
+    public void testGetTrainsByStationExeter() {
+        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("Exeter", mockTrainsList);
 
-        assertEquals("Fails to return null", actualTrainsList, null);
+        expectedTrainsList.add(mockTrainA);
+        expectedTrainsList.add(mockTrainC);
+
+        assertEquals("Fails to return trains by station name", expectedTrainsList, actualTrainsList);
     }
 
+    @Test
+    public void testGetTrainsByStationNotFound() {
+        actualTrainsList = mockGetTrainsByStation.getTrainsByStation("Invalid", mockTrainsList);
+
+        expectedTrainsList = null;
+
+        assertEquals("Fails to return null", expectedTrainsList, actualTrainsList);
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

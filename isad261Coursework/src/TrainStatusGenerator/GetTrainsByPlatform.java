@@ -13,10 +13,7 @@ import java.util.List;
  * @author Tom
  */
 public class GetTrainsByPlatform {
-
-
     
-    private String apiUrl;
     public List<Train> getTrainsByPlatform(int platform, List<Train> trainsList) {
         try {
             List<Train> trainsListByPlatform = new ArrayList();
