@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TrainStatusListener;
+package TrainStatusGenerator;
 
 import java.util.*;
 
@@ -13,14 +13,14 @@ import java.util.*;
  */
 public class Train {
 
-    private String platform, departureTime, expectedDepartureTime;
+    private String platform, departs, expected;
     private String destinationName = null;
     private List<Stop> stops;
 
     public Train(String platform, String departureTime, String expectedDepartureTime, String destinationName, List stops) {
         this.platform = platform;
-        this.departureTime = departureTime;
-        this.expectedDepartureTime = expectedDepartureTime;
+        this.departs = departureTime;
+        this.expected = expectedDepartureTime;
         this.destinationName = destinationName;
         this.stops = stops;
 
@@ -28,8 +28,8 @@ public class Train {
 
     public Train(String platform, String departureTime, String expectedDepartureTime, List stops) {
         this.platform = platform;
-        this.departureTime = departureTime;
-        this.expectedDepartureTime = expectedDepartureTime;
+        this.departs = departureTime;
+        this.expected = expectedDepartureTime;
         this.stops = stops;
 
     }
@@ -45,20 +45,20 @@ public class Train {
         this.platform = platform;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    public String getDeparts() {
+        return departs;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setDeparts(String departs) {
+        this.departs = departs;
     }
 
-    public String getExpectedDepartureTime() {
-        return expectedDepartureTime;
+    public String getExpected() {
+        return expected;
     }
 
-    public void setExpectedDepartureTime(String expectedDepartureTime) {
-        this.expectedDepartureTime = expectedDepartureTime;
+    public void setExpected(String expected) {
+        this.expected = expected;
     }
 
     public List getStops() {
@@ -72,6 +72,7 @@ public class Train {
     public String getDestinationName() {
         return destinationName;
     }
+
 
     public void setDestinationName(String destinationName) {
         this.destinationName = destinationName;

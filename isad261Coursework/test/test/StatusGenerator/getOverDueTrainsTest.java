@@ -5,6 +5,9 @@
  */
 package test.StatusGenerator;
 
+import TrainStatusGenerator.Stop;
+import TrainStatusGenerator.Train;
+import TrainStatusGenerator.GetOverDueTrains;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -15,36 +18,33 @@ import static org.junit.Assert.*;
 import java.util.*;
 import TrainStatusListener.*;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
-import test.StatusGenerator.MockData;
 
 /**
  *
  * @author Tom
  */
-public class getAllOverDueTrainsTest {
+public class getOverDueTrainsTest {
 
-    private TrainStatusListener.StatusListener mockListener;
-    private TrainStatusListener.StatusGenerator mockGenerator;
+    private TrainStatusGenerator.GetOverDueTrains mockGetOverdueTrains;
 
-    private java.util.List actualTrainsList;
+    private String actualNotice;
 
-    private TrainStatusListener.Stop mockStopA;
+    private String expectedNoticeA;
+    private String expectedNoticeB;
+
+    private TrainStatusGenerator.Stop mockStopA;
     private java.util.List mockStopsA;
 
-    private TrainStatusListener.Train mockTrainA;
+    private TrainStatusGenerator.Train mockTrainA;
     private java.util.List mockTrainsListA;
 
-    private java.util.List mockTrainsListAExpected;
-
-    private TrainStatusListener.Stop mockStopB;
+    private TrainStatusGenerator.Stop mockStopB;
     private java.util.List mockStopsB;
 
-    private TrainStatusListener.Train mockTrainB;
+    private TrainStatusGenerator.Train mockTrainB;
     private java.util.List mockTrainsListB;
 
-    private java.util.List mockTrainsListBExpected;
-
-    public getAllOverDueTrainsTest() {
+    public getOverDueTrainsTest() {
     }
 
     @BeforeClass
@@ -57,10 +57,8 @@ public class getAllOverDueTrainsTest {
 
     @Before
     public void setUp() {
-        mockListener = new StatusListener();
-        mockGenerator = new StatusGenerator(mockListener);
+        mockGetOverdueTrains = new GetOverDueTrains();
 
-        actualTrainsList = new ArrayList<Train>();
 
         mockStopA = new Stop("stopNameA", "0000", "1111");
         mockStopsA = new ArrayList<Stop>();
@@ -74,10 +72,6 @@ public class getAllOverDueTrainsTest {
         mockTrainsListA.add(mockTrainA);
         mockTrainsListA.add(mockTrainA);
 
-        mockTrainsListAExpected = new ArrayList<Train>();
-        mockTrainsListAExpected = null;
-        
-        
 
         mockStopB = new Stop("stopNameB", "0000", "1111");
         mockStopsB = new ArrayList<Stop>();
@@ -91,54 +85,43 @@ public class getAllOverDueTrainsTest {
         mockTrainsListB.add(mockTrainB);
         mockTrainsListB.add(mockTrainB);
 
-        mockTrainsListBExpected = new ArrayList<Train>();
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
-        mockTrainsListBExpected.add(mockTrainB);
+
+        actualNotice = new String();
+
+        expectedNoticeA = null;
+        expectedNoticeB = "The following trains are delayed: \n"
+                + "The 0000 train to stopNameB is delayed and will depart at 1111. \n"
+                + "The 0000 train to stopNameB is delayed and will depart at 1111. \n"
+                + "The 0000 train to stopNameB is delayed and will depart at 1111. \n";
     }
 
     @After
     public void tearDown() {
-        actualTrainsList = null;
-        
         mockStopA = null;
         mockStopsA = null;
         mockTrainA = null;
         mockTrainsListA = null;
-        mockTrainsListAExpected = null;
 
         mockStopB = null;
         mockStopsB = null;
         mockTrainB = null;
         mockTrainsListB = null;
-        mockTrainsListBExpected = null;
+    }
+
+
+    @Test
+    public void testGetOverdueTrainsNoticeA() {
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListA);
+
+        assertEquals("Fails to return null", expectedNoticeA, actualNotice);
     }
 
     @Test
-    public void testGetAllOverdueTrainsA() {
-        actualTrainsList = mockGenerator.getAllOverdueTrains(mockTrainsListA);
+    public void testGetOverdueTrainsNoticeB() {
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListB);
 
-        System.err.println("TEST BEGIN");
-        System.err.println(actualTrainsList);
-        System.err.println(mockTrainsListAExpected);
-        System.err.println(mockTrainsListA);
-
-        assertEquals("Fails to return a list of overdue trains", actualTrainsList, mockTrainsListAExpected);
+        assertEquals("Fails to return overdue notice properly", expectedNoticeB, actualNotice);
     }
-
-    @Test
-    public void testGetAllOverdueTrainsB() {
-        actualTrainsList = mockGenerator.getAllOverdueTrains(mockTrainsListB);
-
-        System.err.println("TEST BEGIN");
-        System.err.println(actualTrainsList);
-        System.err.println(mockTrainsListBExpected);
-        System.err.println(mockTrainsListB);
-
-        assertEquals("Fails to return a list of overdue trains", actualTrainsList, mockTrainsListBExpected);
-    }    
-
-
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

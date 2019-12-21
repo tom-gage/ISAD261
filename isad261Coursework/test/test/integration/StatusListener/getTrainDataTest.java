@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package test.StatusListener;
+package test.integration.StatusListener;
 
+import test.StatusListener.*;
 import TrainStatusGenerator.Train;
 import org.junit.After;
 import org.junit.AfterClass;

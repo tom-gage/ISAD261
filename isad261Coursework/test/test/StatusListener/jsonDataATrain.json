@@ -1,7 +1,0 @@
-{ "stops":[
- {"name":"stopNameA","arrives":"0000","departs":"1111"},
- {"name":"stopNameA","arrives":"0000","departs":"1111"},
- {"name":"stopNameA","arrives":"0000","departs":"1111"}],
- "platform":"0",
- "departs":"0000"
-}

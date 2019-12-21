@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package TrainStatusListener;
+package TrainStatusGenerator;
 
 /**
  *
@@ -11,12 +11,12 @@ package TrainStatusListener;
  */
 public class Stop {
 
-    private String name, arrivalTime, departureTime;
+    private String name, arrives, departs;
 
     public Stop(String name, String arrivalTime, String departureTime) {
         this.name = name;
-        this.arrivalTime = arrivalTime;
-        this.departureTime = departureTime;
+        this.arrives = arrivalTime;
+        this.departs = departureTime;
     }
 
     public Stop() {
@@ -31,20 +31,20 @@ public class Stop {
         this.name = name;
     }
 
-    public String getArrivalTime() {
-        return arrivalTime;
+    public String getArrives() {
+        return arrives;
     }
 
-    public void setArrivalTime(String arrivalTime) {
-        this.arrivalTime = arrivalTime;
+    public void setArrives(String arrives) {
+        this.arrives = arrives;
     }
 
-    public String getDepartureTime() {
-        return departureTime;
+    public String getDeparts() {
+        return departs;
     }
 
-    public void setDepartureTime(String departureTime) {
-        this.departureTime = departureTime;
+    public void setDeparts(String departs) {
+        this.departs = departs;
     }
 
 }

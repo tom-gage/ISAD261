@@ -5,6 +5,9 @@
  */
 package test.StatusGenerator;
 
+import TrainStatusGenerator.Stop;
+import TrainStatusGenerator.Train;
+import TrainStatusGenerator.GetTrainsByPlatform;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -14,31 +17,28 @@ import static org.junit.Assert.*;
 
 import java.util.*;
 import TrainStatusListener.*;
-import test.StatusGenerator.MockData;
 
 /**
  *
  * @author Tom
  */
 public class getTrainsByPlatformTest {
-
-    private TrainStatusListener.StatusListener mockListener;
-    private TrainStatusListener.StatusGenerator mockGenerator;
+    private TrainStatusGenerator.GetTrainsByPlatform mockGetTrainsByPlatform;
 
     private java.util.List actualTrainsList;
 
-    private TrainStatusListener.Stop mockStopA;
+    private TrainStatusGenerator.Stop mockStopA;
     private java.util.List mockStopsA;
 
-    private TrainStatusListener.Train mockTrainA;
+    private TrainStatusGenerator.Train mockTrainA;
     private java.util.List mockTrainsListA;
 
     private java.util.List mockTrainsListAExpected;
 
-    private TrainStatusListener.Stop mockStopB;
+    private TrainStatusGenerator.Stop mockStopB;
     private java.util.List mockStopsB;
 
-    private TrainStatusListener.Train mockTrainB;
+    private TrainStatusGenerator.Train mockTrainB;
     private java.util.List mockTrainsListB;
 
     private java.util.List mockTrainsListBExpected;
@@ -56,8 +56,7 @@ public class getTrainsByPlatformTest {
 
     @Before
     public void setUp() {
-        mockListener = new StatusListener();
-        mockGenerator = new StatusGenerator(mockListener);
+        mockGetTrainsByPlatform = new GetTrainsByPlatform();
 
         actualTrainsList = new ArrayList<Train>();
 
@@ -115,27 +114,24 @@ public class getTrainsByPlatformTest {
 
     @Test
     public void testGetTrainsByPlatformValidPlatformA() {
-        actualTrainsList = mockGenerator.getTrainsByPlatform(0, mockTrainsListA);
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, mockTrainsListA);
 
         assertEquals("Fails to return a list of trains", mockTrainsListAExpected, actualTrainsList);
     }
 
     @Test
     public void testGetTrainsByPlatformValidPlatformB() {
-        actualTrainsList = mockGenerator.getTrainsByPlatform(1, mockTrainsListB);
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(1, mockTrainsListB);
 
         assertEquals("Fails to return a list of trains", mockTrainsListBExpected, actualTrainsList);
     }
 
     @Test
     public void testGetTrainsByPlatformInvalidPlatform() {
-        actualTrainsList = mockGenerator.getTrainsByPlatform(-1, mockTrainsListA);
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(-1, mockTrainsListA);
 
         assertEquals("Fails to return a list of trains", null, actualTrainsList);
         
-        
-        
-        System.err.println(MockData.getTrainsListAAsJson());
     }
 
     // TODO add test methods here.

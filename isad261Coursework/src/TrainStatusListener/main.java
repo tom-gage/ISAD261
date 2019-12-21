@@ -4,6 +4,12 @@
  * and open the template in the editor.
  */
 package TrainStatusListener;
+import TrainStatusGenerator.GetOverDueTrains;
+import TrainStatusGenerator.GetTrainsByPlatform;
+import TrainStatusGenerator.GetTrainsByStation;
+import TrainStatusGenerator.Stop;
+import TrainStatusGenerator.Train;
+import com.google.gson.Gson;
 import java.util.*;
 
 /**
@@ -18,24 +24,28 @@ public class main {
      */
     public static void main(String[] args) throws Exception {
         StatusListener myListener = new StatusListener();
-        StatusGenerator myGenerator = new StatusGenerator(myListener);
         
         System.out.println("PROGRAM START");
-        List<Train> trains = myGenerator.getTrainsList("http://web.socem.plymouth.ac.uk/david/trains.json");
-        List<Train> overdueTrains = myGenerator.getAllOverdueTrains(trains);
+        List<Train> trains = myListener.getTrainData("http://web.socem.plymouth.ac.uk/david/trains.json");
+        GetOverDueTrains test = new GetOverDueTrains();
+        GetTrainsByStation trainsByStation = new GetTrainsByStation();
         
-        Train train = trains.get(0);
-        Train overdueTrain = overdueTrains.get(0);
+        Gson gson = new Gson();
+        GetTrainsByPlatform getByPlatform  = new GetTrainsByPlatform();
         
-        List<Stop> trainStops = train.getStops();
-        List<Stop> overdueTrainStops = overdueTrain.getStops();
+        Train tempTrain = trains.get(0);
         
-        Stop stop = trainStops.get(0);
-//        System.out.println(stop.getDepartureTime()); 
+        List<Stop> stops = tempTrain.getStops();
         
-        myGenerator.printOverdudeTrainsNotice(overdueTrains);
+        Stop tempStop = stops.get(0);
         
+        System.out.println(tempStop.getName());
         
+        String trainsJson = gson.toJson(trains);
+        
+//        System.out.println(getByPlatform.getTrainsByPlatform(2, trains));
+//        
+        //System.out.println(trainsJson);
     }
     
 }
