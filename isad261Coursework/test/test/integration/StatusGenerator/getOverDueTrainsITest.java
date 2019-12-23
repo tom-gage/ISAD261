@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
  *
  * @author Tom
  */
-public class getOverDueTrainsTest {
+public class getOverDueTrainsITest {
 
     private TrainStatusListener.StatusListener listener;
     private TrainStatusGenerator.GetOverDueTrains getOverdueTrains;
@@ -31,7 +31,7 @@ public class getOverDueTrainsTest {
 
     private String expectedNotice;
 
-    public getOverDueTrainsTest() {
+    public getOverDueTrainsITest() {
     }
 
     @BeforeClass
@@ -66,7 +66,7 @@ public class getOverDueTrainsTest {
         trainsList = listener.getTrainData(apiUrl);
         actualNotice = getOverdueTrains.getOverdueTrainsNotice(trainsList);
         
-        assertEquals("Fails to return null", expectedNotice, actualNotice);
+        assertEquals("Fails to return overdue trains notice", expectedNotice, actualNotice);
     }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:

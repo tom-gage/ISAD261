@@ -21,7 +21,7 @@ import java.util.*;
  *
  * @author Tom
  */
-public class getTrainDataTest {
+public class getTrainDataITest {
 
     private TrainStatusListener.StatusListener mockListener;
     private String validApiUrl;
@@ -30,7 +30,7 @@ public class getTrainDataTest {
     private java.util.List expected;
     private java.util.List actual;
 
-    public getTrainDataTest() {
+    public getTrainDataITest() {
     }
 
     @BeforeClass

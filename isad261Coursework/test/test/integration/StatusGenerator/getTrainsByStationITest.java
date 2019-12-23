@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  *
  * @author Tom
  */
-public class getTrainsByStationTest {
+public class getTrainsByStationITest {
 
     private TrainStatusListener.StatusListener listener;
     private TrainStatusGenerator.GetTrainsByStation getTrainsByStation;
@@ -38,7 +38,7 @@ public class getTrainsByStationTest {
     private String stationA;
     private String stationB;
 
-    public getTrainsByStationTest() {
+    public getTrainsByStationITest() {
     }
 
     @BeforeClass
@@ -64,8 +64,6 @@ public class getTrainsByStationTest {
 
         gson = new Gson();
 
-        stationA = "Plymouth";
-        stationB = "Paignton";
     }
 
     @After
@@ -74,7 +72,7 @@ public class getTrainsByStationTest {
 
     @Test
     public void integrationTestGetTrainsByPlatformA() throws Exception {
-        trainsListActual = getTrainsByStation.getTrainsByStation(stationA, listener.getTrainData(apiUrl));
+        trainsListActual = getTrainsByStation.getTrainsByStation("Plymouth", listener.getTrainData(apiUrl));
 
         jsonActual = gson.toJson(trainsListActual);
 
@@ -83,12 +81,21 @@ public class getTrainsByStationTest {
 
     @Test
     public void integrationTestGetTrainsByPlatformB() throws Exception {
-        trainsListActual = getTrainsByStation.getTrainsByStation(stationB, listener.getTrainData(apiUrl));
+        trainsListActual = getTrainsByStation.getTrainsByStation("Paignton", listener.getTrainData(apiUrl));
 
         jsonActual = gson.toJson(trainsListActual);
 
         assertEquals("Failed to return trains by platform properly", jsonExpectedB, jsonActual);
     }
+    
+        @Test
+    public void platformNotFound() throws Exception {
+        trainsListActual = getTrainsByStation.getTrainsByStation("invalid", listener.getTrainData(apiUrl));
+
+
+        assertEquals("Failed to return null", null, trainsListActual);
+    }
+
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //

@@ -55,7 +55,7 @@ public class getTrainDataTest {
     }
 
     @Test
-    public void testGetTrainDataValidUrl() throws Exception {
+    public void validUrl() throws Exception {
         actual = mockListener.getTrainData(validApiUrl);
 
         assertEquals("Fails to return a list of Trains", actual.getClass(), expected.getClass());
@@ -63,7 +63,7 @@ public class getTrainDataTest {
     }
 
     @Test
-    public void testGetTrainDataInvalidUrl() throws Exception {
+    public void invalidUrl() throws Exception {
         actual = mockListener.getTrainData(invalidApiUrl);
 
         assertEquals("Fails to return null", actual, null);

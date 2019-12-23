@@ -61,12 +61,8 @@ public class getTrainsByPlatformTest {
         actualTrainsList = new ArrayList<Train>();
         expectedTrainsList = new ArrayList<Train>();
 
-        //mock stops
-        mockStop = new Stop("stopNameA", "0000", "1111");
         mockStops = new ArrayList<Stop>();
-        mockStops.add(mockStop);
-        mockStops.add(mockStop);
-        mockStops.add(mockStop);
+
 
         //mock trains
         mockTrainA = new Train("0", "0000", "1111", mockStops);
@@ -94,7 +90,8 @@ public class getTrainsByPlatformTest {
     }
 
     @Test
-    public void testGetTrainsByPlatformZero() {
+    public void platformZero() {
+        //platform 0
         actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, mockTrainsList);
 
         expectedTrainsList.add(mockTrainA);
@@ -104,7 +101,8 @@ public class getTrainsByPlatformTest {
     }
 
     @Test
-    public void testGetTrainsByPlatformOne() {
+    public void platformOne() {
+        //platform 2
         actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(1, mockTrainsList);
 
         expectedTrainsList.add(mockTrainB);
@@ -114,7 +112,8 @@ public class getTrainsByPlatformTest {
     }
 
     @Test
-    public void testGetTrainsByPlatformExtreme() {
+    public void platformHigh() {
+        //platform 99999
         actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(99999, mockTrainsList);
 
         expectedTrainsList.add(mockTrainC);
@@ -124,7 +123,8 @@ public class getTrainsByPlatformTest {
     }
 
     @Test
-    public void testGetTrainsByPlatformMinus() {
+    public void platformNegative() {
+        //platform -99999 
         actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(-99999, mockTrainsList);
 
         expectedTrainsList.add(mockTrainD);
@@ -134,17 +134,19 @@ public class getTrainsByPlatformTest {
     }
 
     @Test
-    public void testGetTrainsByPlatformNotFound() {
-        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(8, mockTrainsList);
+    public void platformNotFound() {
+        //no such platform
+        actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(-1, mockTrainsList);
 
-        assertEquals("Fails to return a list of trains", null, actualTrainsList);
+        assertEquals("Fails to return null", null, actualTrainsList);
     }
 
     @Test
-    public void testGetTrainsByPlatformEmptyTrainsList() {
+    public void emptyTrainsList() {
+        //no such train
         actualTrainsList = mockGetTrainsByPlatform.getTrainsByPlatform(0, null);
 
-        assertEquals("Fails to return a list of trains", null, actualTrainsList);
+        assertEquals("Fails to return null", null, actualTrainsList);
     }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:

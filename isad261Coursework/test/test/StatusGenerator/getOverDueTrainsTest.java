@@ -38,25 +38,10 @@ public class getOverDueTrainsTest {
     private java.util.List mockStopsList;
 
     private TrainStatusGenerator.Train mockTrainA;
-    private java.util.List mockTrainsListA;
-
-    private TrainStatusGenerator.Stop mockStopB;
-    private java.util.List mockStopsB;
+    private java.util.List mockTrainsList;
 
     private TrainStatusGenerator.Train mockTrainB;
-    private java.util.List mockTrainsListB;
 
-    private TrainStatusGenerator.Stop mockStopC;
-    private java.util.List mockStopsC;
-
-    private TrainStatusGenerator.Train mockTrainC;
-    private java.util.List mockTrainsListC;
-
-    private TrainStatusGenerator.Stop mockStopD;
-    private java.util.List mockStopsD;
-
-    private TrainStatusGenerator.Train mockTrainD;
-    private java.util.List mockTrainsListD;
 
     public getOverDueTrainsTest() {
     }
@@ -80,30 +65,12 @@ public class getOverDueTrainsTest {
         mockStopsList.add(mockStop);
         mockStopsList.add(mockStop);
 
-        //no trains overdue
+        //mock train a
         mockTrainA = new Train("0", "0000", null, mockStopsList);
-        mockTrainsListA = new ArrayList<Train>();
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
-        mockTrainsListA.add(mockTrainA);
-
-        //all trains overdue
+        //mock train b
         mockTrainB = new Train("0", "0000", "1111", mockStopsList);
-        mockTrainsListB = new ArrayList<Train>();
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
-        mockTrainsListB.add(mockTrainB);
 
-        //trains list empty
-        mockTrainC = new Train("0", "0000", "1111", mockStopsList);
-        mockTrainsListC = new ArrayList<Train>();
-
-        //some trains overdue
-        mockTrainD = new Train("0", "0000", "1111", mockStopsList);
-        mockTrainsListD = new ArrayList<Train>();
-        mockTrainsListD.add(mockTrainB);
-        mockTrainsListD.add(mockTrainA);
-        mockTrainsListD.add(mockTrainB);
+        mockTrainsList = new ArrayList<Train>();
 
         actualNotice = new String();
 
@@ -123,29 +90,45 @@ public class getOverDueTrainsTest {
     }
 
     @Test
-    public void testGetOverdueTrainsNoticeA() {
-        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListA);
+    public void noTrainsOverdue() {
+        //no trains overdue
+        mockTrainsList.add(mockTrainA);
+        mockTrainsList.add(mockTrainA);
+        mockTrainsList.add(mockTrainA);
+        
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsList);
 
         assertEquals("Fails to return null", expectedNoticeA, actualNotice);
     }
 
     @Test
-    public void testGetOverdueTrainsNoticeB() {
-        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListB);
+    public void allTrainsOverdue() {
+        //all trains overdue
+        mockTrainsList.add(mockTrainB);
+        mockTrainsList.add(mockTrainB);
+        mockTrainsList.add(mockTrainB);
+        
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsList);
 
         assertEquals("Fails to return overdue notice properly", expectedNoticeB, actualNotice);
     }
 
     @Test
-    public void testGetOverdueTrainsNoticeC() {
-        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListC);
+    public void emptyTrainsArray() {
+        //no trains
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsList);
 
         assertEquals("Fails to return overdue notice properly", expectedNoticeC, actualNotice);
     }
 
     @Test
-    public void testGetOverdueTrainsNoticeD() {
-        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsListD);
+    public void someTrainsOverdue() {
+        //mixed trains
+        mockTrainsList.add(mockTrainB);
+        mockTrainsList.add(mockTrainA);
+        mockTrainsList.add(mockTrainB);
+
+        actualNotice = mockGetOverdueTrains.getOverdueTrainsNotice(mockTrainsList);
 
         assertEquals("Fails to return overdue notice properly", expectedNoticeD, actualNotice);
     }
